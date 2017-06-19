@@ -17,14 +17,14 @@ public class MonthView extends VBox {
     Month month;
     GridPane grid;
 
-    public MonthView() {
+    public MonthView(int monthNo, int year) {
 
         // Creating a new Month instance.
-            month = new Month(new Date());
+            month = new Month(monthNo, year);
             int[] calendar = month.getCalendar();
 
         // Creating a label for the month.
-            Label monthText = new Label(month.getMonthName());
+            Label monthText = new Label(month.getMonthName(monthNo));
             monthText.setTextFill(Color.LIGHTGREY);
             this.setAlignment(Pos.CENTER);
             this.getChildren().add(monthText);
@@ -46,7 +46,7 @@ public class MonthView extends VBox {
 
         // Writing the numbers of days row by row
         int offset = month.getFirstDayOffset();
-        int numPreviousMonthDays = month.getPreviousMonthDays();
+        int numPreviousMonthDays = month.getPreviousMonthDays(monthNo);
             for(int row = 0; row < 6; row++ ){
                 for(int column = 0; column < 7; column++){
                      Label dayNumber = new Label(Integer.toString(calendar[7 * row + column]));
