@@ -21,7 +21,7 @@ public class Main extends Application {
         primaryStage.setTitle("Calendar");
         primaryStage.setWidth(500);
         primaryStage.setHeight(500);
-        MonthView monthView = new MonthView(12, 2017);
+        MonthView monthView = new MonthView(4, 2016);
 
         HBox hbox = new HBox(5);
         hbox.getChildren().addAll(monthView);

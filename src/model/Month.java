@@ -38,41 +38,39 @@ public class Month {
     public Month(int monthNo, int year){
 
         requestedMonth = monthNames[monthNo];
-        monthDifference = Math.abs(monthNo - month);
+        monthDifference = findMonthDifference(monthNo, year);
         offset = getFirstDayOffset();
 
-        int atMonth = month ;
-        if(monthNo < month && year == this.year){
+
+        int atMonth = month;
+
+       if(Math.signum((float) monthDifference) > 0){
+           // Month difference is positive, therefore we are going to fast forward months.
+
            for(int monthIndex = 1; monthIndex <= monthDifference; monthIndex++){
-               atMonth = month - monthIndex;
-                for(int dayIndex = 1; dayIndex <= daysInMonth[atMonth]; dayIndex++){
-                    offset = previousOffset(offset);
 
-                }
+               for(int dayIndex = 1; dayIndex <= daysInMonth[atMonth]; dayIndex++){
+                   offset = nextOffset(offset);
+
+               }
+               atMonth = getNextMonth(atMonth);
            }
-        }
-        else if(monthNo > month && this.year == year){
-            System.out.println("Month difference: " + monthDifference);
-          for(int dayIndex = 1; dayIndex <= daysInMonth[month]; dayIndex++){
+
+       }else {
+           // Month difference is negative or zero, thus we will rewind months.
+           for (int monthIndex = 1; monthIndex <= -monthDifference; monthIndex++) {
+               atMonth = getLastMonth(atMonth);
+               for (int dayIndex = 1; dayIndex <= daysInMonth[atMonth]; dayIndex++) {
+                   offset = previousOffset(offset);
+               }
 
 
-              offset = nextOffset(offset);
-          }
-          for(int monthIndex = 1; monthIndex < monthDifference; monthIndex++){
-              atMonth += 1;
-
-              for(int dayIndex = 1; dayIndex <= daysInMonth[atMonth]; dayIndex++ ){
-               
-                  offset = nextOffset(offset);
-              }
-          }
-          atMonth += 1;
-
-        }
+           }
+       }
 
         calendar = formCalendar(atMonth, year);
-        monthName = monthNames[month - monthDifference];
-        System.out.println(monthName);
+
+
 
 
 
@@ -200,6 +198,42 @@ public class Month {
         return calendar;
     }
 
+    private int findMonthDifference(int monthNo, int year){
+        int diff = 0;
 
+        // Current year
+        if(this.month > monthNo && this.year == year){
+            diff = monthNo - month;
+        }else if(month < monthNo && this.year == year){
+            diff = monthNo - month;
+        }
+
+        // Future
+        else if(month > monthNo && this.year < year){
+            diff = (12- month) + monthNo;
+        }else if(month < monthNo && this.year < year){
+            diff = 12 + (monthNo - month);
+
+        // Past
+        }else if(month > monthNo && this.year > year){
+            diff = -(12 + (month - monthNo));
+        }else{
+            diff = - month - monthNo;
+        }
+
+        return diff;
+    }
+
+    private int getNextMonth( int month){
+
+        if(month == 12) return 1;
+        else return month +1;
+    }
+    private int getLastMonth(int month){
+        if(month == 1) return 12;
+        else return month -1;
+    }
 }
+
+
 
