@@ -40,28 +40,34 @@ public class Month {
         requestedMonth = monthNames[monthNo];
         monthDifference = Math.abs(monthNo - month);
         offset = getFirstDayOffset();
-        System.out.println("Current month first weekday: " + getWeekdayWithOffset(offset) );
+
         int atMonth = month ;
         if(monthNo < month && year == this.year){
            for(int monthIndex = 1; monthIndex <= monthDifference; monthIndex++){
                atMonth = month - monthIndex;
                 for(int dayIndex = 1; dayIndex <= daysInMonth[atMonth]; dayIndex++){
                     offset = previousOffset(offset);
-                    System.out.println("Month: " + monthNames[atMonth] + " Day: " + dayIndex + " Offset: " + offset);
+
                 }
            }
         }
         else if(monthNo > month && this.year == year){
-            for(int dayIndex = 2; dayIndex <= daysInMonth[atMonth]; dayIndex++){
-                offset = nextOffset(offset);
-            }
-            for(int monthIndex = 1; monthIndex <= monthDifference -1; monthIndex++){
-                atMonth = month + monthIndex;
-                for(int dayIndex = 1; dayIndex <= daysInMonth[atMonth]; dayIndex++){
-                    offset = nextOffset(offset);
-                    System.out.println("Month: " + monthNames[atMonth] + " Day: " + dayIndex + " Offset: " + offset);
-                }
-            }
+            System.out.println("Month difference: " + monthDifference);
+          for(int dayIndex = 1; dayIndex <= daysInMonth[month]; dayIndex++){
+
+
+              offset = nextOffset(offset);
+          }
+          for(int monthIndex = 1; monthIndex < monthDifference; monthIndex++){
+              atMonth += 1;
+
+              for(int dayIndex = 1; dayIndex <= daysInMonth[atMonth]; dayIndex++ ){
+               
+                  offset = nextOffset(offset);
+              }
+          }
+          atMonth += 1;
+
         }
 
         calendar = formCalendar(atMonth, year);
